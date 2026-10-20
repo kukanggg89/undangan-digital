@@ -348,7 +348,7 @@ function renderRsvp() {
     field('rsvpName', 'Nama', nameInput),
     statusField,
     field('rsvpMessage', 'Ucapan & doa', message, counter),
-    el('button', { class: 'btn-main', type: 'submit' }, [icon('send'), 'Kirim']),
+    el('button', { class: 'btn-main', type: 'submit' }, [icon('send'), 'Kirim Ucapan']),
     note,
   ]);
 
@@ -410,7 +410,7 @@ function renderRsvp() {
     const status = form.status.value;
     const text = message.value.trim();
     setError('rsvpName', name ? '' : 'Nama belum diisi.');
-    setError('rsvpStatus', status ? '' : 'Pilih salah satu pilihan kehadiran.');
+    setError('rsvpStatus', status ? '' : 'Pilih status kehadiran dulu.');
     setError('rsvpMessage', text ? '' : 'Tulis ucapan singkat untuk mempelai.');
     if (!name || !status || !text) {
       note.textContent = '';
@@ -434,7 +434,7 @@ function renderRsvp() {
     el('p', { class: 'section-lead', text: 'Mohon konfirmasi sebelum 5 Desember 2026. Doa dan ucapan juga bisa dititipkan di sini.' }),
     form,
     el('div', { class: 'gb-head' }, [
-      el('h3', { class: 'wishes-title', text: 'Ucapan dari tamu' }),
+      el('h3', { class: 'wishes-title', text: 'Doa & Ucapan' }),
       nav,
     ]),
     tally,
@@ -519,7 +519,7 @@ function renderGift() {
 
   box.append(
     el('h2', { class: 'section-title', text: 'Tanda Kasih' }),
-    el('p', { class: 'section-lead', text: 'Doa restu sudah lebih dari cukup. Bila ingin memberi tanda kasih, bisa lewat rekening atau alamat di bawah.' }),
+    el('p', { class: 'section-lead', text: 'Kehadiran dan doa restu sudah sangat berarti bagi kami. Jika ingin mengirim hadiah, bisa lewat amplop di bawah.' }),
     stage,
     toggle,
     el('div', { class: 'gift-address' }, [

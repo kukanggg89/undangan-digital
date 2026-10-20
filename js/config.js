@@ -20,7 +20,7 @@ const CONFIG = {
 
   opening: {
     greeting: 'Assalamu’alaikum Warahmatullahi Wabarakatuh',
-    intro: 'Dengan memohon rahmat dan ridha Allah SWT, kami bermaksud menyelenggarakan pernikahan kami dan mengundang Bapak/Ibu/Saudara/i untuk hadir.',
+    intro: 'Dengan memohon rahmat dan ridha Allah SWT, kami mengundang Bapak/Ibu/Saudara/i untuk hadir di hari pernikahan kami.',
     quote: 'Dan di antara tanda-tanda kebesaran-Nya, Dia menciptakan pasangan untukmu dari jenismu sendiri, agar kamu merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.',
     source: 'QS. Ar-Rum: 21',
   },
@@ -28,14 +28,14 @@ const CONFIG = {
   story: [
     { date: 'Agustus 2019', title: 'Pertama Bertemu', text: 'Kenalan di UKM fotografi kampus. Raka salah ambil kamera, ternyata punya Nadia.' },
     { date: 'Maret 2021', title: 'Mulai Bersama', text: 'Setelah dua tahun hunting foto bareng, akhirnya sepakat jalan berdua.' },
-    { date: 'Juni 2025', title: 'Lamaran', text: 'Raka datang bersama keluarga ke rumah Nadia di Bandung. Jawabannya: iya.' },
-    { date: 'Desember 2026', title: 'Hari Bahagia', text: 'Kami memulai babak baru, disaksikan keluarga dan sahabat terdekat.' },
+    { date: 'Juni 2025', title: 'Lamaran', text: 'Raka datang bersama keluarga ke rumah Nadia di Bandung, dan lamarannya diterima.' },
+    { date: 'Desember 2026', title: 'Hari Bahagia', text: 'Kami menikah di Lembang, ditemani keluarga dan sahabat terdekat.' },
   ],
 
   events: [
     {
       name: 'Akad Nikah',
-      time: '08.00 - 10.00 WIB',
+      time: '08.00 sampai 10.00 WIB',
       place: 'Kebun Kalaras',
       address: 'Jl. Kolonel Masturi No. 88, Lembang, Bandung Barat',
       start: '2026-12-12T08:00:00+07:00',
@@ -43,7 +43,7 @@ const CONFIG = {
     },
     {
       name: 'Resepsi',
-      time: '11.00 - 14.00 WIB',
+      time: '11.00 sampai 14.00 WIB',
       place: 'Kebun Kalaras',
       address: 'Jl. Kolonel Masturi No. 88, Lembang, Bandung Barat',
       start: '2026-12-12T11:00:00+07:00',
