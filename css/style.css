@@ -388,8 +388,30 @@ body.is-locked { overflow: hidden; }
 
 #mempelai .section-title { margin-bottom: 48px; }
 
-.person { margin: 0; width: 78%; }
+.person {
+  position: relative;
+  isolation: isolate;
+  margin: 0;
+  width: 78%;
+}
+
 .person-right { margin-left: auto; text-align: right; }
+
+.person-initial {
+  position: absolute;
+  z-index: -1;
+  top: -0.12em;
+  right: -0.42em;
+  font-family: var(--serif);
+  font-size: clamp(11rem, 48vw, 16rem);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--blue-light);
+  pointer-events: none;
+  user-select: none;
+}
+
+.person-right .person-initial { right: auto; left: -0.42em; }
 
 .arch {
   aspect-ratio: 3 / 4;
@@ -408,9 +430,16 @@ body.is-locked { overflow: hidden; }
 
 .person figcaption { padding-top: 20px; }
 
+.person-nick {
+  font-size: clamp(2.5rem, 10vw, 3.25rem);
+  line-height: 1.05;
+}
+
 .person-name {
-  font-size: 1.875rem;
-  line-height: 1.15;
+  margin-top: 6px;
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  line-height: 1.3;
 }
 
 .person-parents {

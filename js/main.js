@@ -113,9 +113,11 @@ function renderOpening() {
 
 function person(p, side) {
   return el('figure', { class: `person person-${side}` }, [
-    el('div', { class: 'arch' }, el('img', { src: p.photo, alt: p.name, loading: 'lazy', width: 800, height: 1067 })),
+    el('span', { class: 'person-initial', text: p.nick[0], 'aria-hidden': 'true' }),
+    el('div', { class: 'arch' }, el('img', { src: p.photo, alt: p.name, loading: 'lazy', width: 600, height: 800 })),
     el('figcaption', {}, [
-      el('h3', { class: 'person-name', text: p.name }),
+      el('h3', { class: 'person-nick', text: p.nick }),
+      el('p', { class: 'person-name', text: p.name }),
       el('p', { class: 'person-parents', text: p.parents }),
     ]),
   ]);
