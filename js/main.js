@@ -134,18 +134,24 @@ function renderCouple() {
   );
 }
 
+const MONTHS = ['januari', 'februari', 'maret', 'april', 'mei', 'juni', 'juli', 'agustus', 'september', 'oktober', 'november', 'desember'];
+
+function stamp(label) {
+  const [month, year] = label.toLowerCase().split(' ');
+  return `${String(MONTHS.indexOf(month) + 1).padStart(2, '0')} '${year.slice(2)}`;
+}
+
 function renderStory() {
   const box = section('kisah', 'Kisah cinta', 'section-alt');
-  const list = el('ol', { class: 'timeline' }, CONFIG.story.map(item =>
+  const film = el('ol', { class: 'timeline film' }, CONFIG.story.map(item =>
     el('li', { class: 'moment' }, [
-      el('p', { class: 'moment-date', text: item.date }),
-      el('div', { class: 'moment-body' }, [
-        el('h3', { class: 'moment-title', text: item.title }),
-        el('p', { text: item.text }),
-      ]),
+      el('span', { class: 'visually-hidden', text: item.date }),
+      el('h3', { class: 'moment-title', text: item.title }),
+      el('p', { text: item.text }),
+      el('span', { class: 'stamp', text: stamp(item.date), 'aria-hidden': 'true' }),
     ])
   ));
-  box.append(el('h2', { class: 'section-title', text: 'Cerita Kami' }), list);
+  box.append(el('h2', { class: 'section-title', text: 'Cerita Kami' }), film);
 }
 
 function gcalDate(iso) {

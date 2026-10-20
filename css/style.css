@@ -461,67 +461,63 @@ body.is-locked { overflow: hidden; }
   .person { width: 62%; }
 }
 
-.timeline {
+.film {
+  --hole: rgb(248 246 241 / 0.92);
   position: relative;
+  display: grid;
+  gap: 12px;
   margin: 48px 0 0;
-  padding: 0 0 0 28px;
+  padding: 16px 30px;
   list-style: none;
+  border-radius: 4px;
+  background: #1C2935;
+  box-shadow: var(--shadow);
 }
 
+.film::before,
+.film::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  width: 9px;
+  background: repeating-linear-gradient(to bottom, var(--hole) 0 10px, transparent 10px 20px);
+  border-radius: 2px;
+}
+
+.film::before { left: 10px; }
+.film::after { right: 10px; }
 
 .moment {
   position: relative;
-  padding-bottom: 40px;
-}
-
-.moment:last-child { padding-bottom: 0; }
-
-.moment::after {
-  content: "";
-  position: absolute;
-  top: 17px;
-  bottom: -8px;
-  left: -24px;
-  width: 1px;
-  background: var(--gold);
-}
-
-.moment:last-child::after { display: none; }
-
-.moment::before {
-  content: "";
-  position: absolute;
-  top: 8px;
-  left: -28px;
-  width: 9px;
-  height: 9px;
-  border: 1px solid var(--gold);
-  border-radius: 50%;
-  background: var(--blue-light);
-}
-
-.moment-date {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--navy-soft);
+  padding: 24px 20px 40px;
+  border-radius: 2px;
+  background: var(--ivory);
 }
 
 .moment-title {
-  margin: 4px 0 8px;
+  margin-bottom: 8px;
   font-size: 1.625rem;
 }
 
-.moment-body p { color: var(--navy-soft); }
+.moment p { color: var(--navy-soft); }
+
+.stamp {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  color: #9C7B47;
+}
 
 @media (min-width: 576px) {
-  .moment {
-    display: grid;
-    grid-template-columns: 128px 1fr;
-    gap: 24px;
-  }
-
-  .moment-date { padding-top: 6px; }
-  .moment-title { margin-top: 0; }
+  .film { padding: 20px 40px; gap: 16px; }
+  .film::before { left: 14px; }
+  .film::after { right: 14px; }
+  .moment { padding: 28px 28px 44px; }
 }
 
 #acara .section-inner { display: flex; flex-direction: column; }
