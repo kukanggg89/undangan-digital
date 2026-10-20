@@ -498,7 +498,7 @@ function renderGift() {
     card,
     el('div', { class: 'env-pocket', 'aria-hidden': 'true' }),
   ]);
-  const stage = el('div', { class: 'env-stage' }, envelope);
+  const stage = el('div', { class: 'env-stage' }, el('div', { class: 'env-room' }, envelope));
   const toggle = el('button', { class: 'btn-main env-toggle', type: 'button', 'aria-controls': 'giftCard', 'aria-expanded': 'false' });
 
   const fit = () => {

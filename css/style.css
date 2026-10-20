@@ -1071,18 +1071,30 @@ textarea.input { resize: vertical; min-height: 120px; }
 .env-stage {
   --env-h: 220px;
   --card-h: 260px;
-  --drop: calc(var(--card-h) - 12px);
+  --flap-h: calc(var(--env-h) * 0.58);
+  --rise: calc(var(--flap-h) * 0.8);
+  --drop: max(0px, calc(var(--card-h) - 12px - var(--rise)));
   --ease-out: cubic-bezier(0.22, 0.8, 0.24, 1);
   --ease-io: cubic-bezier(0.55, 0, 0.3, 1);
-  position: relative;
-  height: var(--env-h);
   margin-top: 40px;
-  transition: height 0.85s var(--ease-io);
+  padding-top: 0;
+  transition: padding-top 0.5s var(--ease-io) 1.3s;
 }
 
 .env-stage.is-open {
+  padding-top: var(--flap-h);
+  transition: padding-top 0.5s var(--ease-io);
+}
+
+.env-room {
+  position: relative;
+  height: var(--env-h);
+  transition: height 0.85s var(--ease-io);
+}
+
+.is-open .env-room {
   height: calc(var(--drop) + var(--env-h));
-  transition: height 1s var(--ease-out) 0.5s;
+  transition: height 1s var(--ease-out) 0.95s;
 }
 
 .envelope {
@@ -1100,7 +1112,7 @@ textarea.input { resize: vertical; min-height: 120px; }
 
 .is-open .envelope {
   transform: translateY(var(--drop));
-  transition: transform 1s var(--ease-out) 0.5s;
+  transition: transform 1s var(--ease-out) 0.95s;
 }
 
 .env-back,
@@ -1149,7 +1161,7 @@ textarea.input { resize: vertical; min-height: 120px; }
   height: 58%;
   transform-origin: top;
   transform-style: preserve-3d;
-  transition: transform 0.75s var(--ease-io) 0.75s, z-index 0s linear 1.12s;
+  transition: transform 0.65s var(--ease-io) 0.7s, z-index 0s linear 1.03s;
 }
 
 .flap-outer,
@@ -1172,8 +1184,8 @@ textarea.input { resize: vertical; min-height: 120px; }
 }
 
 .flap-inner {
-  background: linear-gradient(0deg, #F6F0E4, #EEE4D2);
-  transform: rotateX(180deg);
+  background: linear-gradient(180deg, #F7F2E8, #EBE0CC);
+  transform: rotateY(180deg);
 }
 
 .env-seal {
@@ -1197,7 +1209,7 @@ textarea.input { resize: vertical; min-height: 120px; }
 .is-open .env-flap {
   z-index: 1;
   transform: rotateX(180deg);
-  transition: transform 0.75s var(--ease-io), z-index 0s linear 0.38s;
+  transition: transform 0.65s var(--ease-io) 0.4s, z-index 0s linear 0.73s;
 }
 
 .env-card {
@@ -1221,8 +1233,8 @@ textarea.input { resize: vertical; min-height: 120px; }
 
 .is-open .env-card {
   clip-path: inset(-24px -24px -24px -24px);
-  transform: translateY(calc(var(--drop) * -1));
-  transition: transform 1s var(--ease-out) 0.5s, clip-path 1s var(--ease-out) 0.5s;
+  transform: translateY(calc((var(--drop) + var(--rise)) * -1));
+  transition: transform 1s var(--ease-out) 0.95s, clip-path 1s var(--ease-out) 0.95s;
 }
 
 .account,
@@ -1601,6 +1613,7 @@ body::before {
   .ring path,
   .seal,
   .env-stage,
+  .env-room,
   .envelope,
   .env-flap,
   .env-card,
