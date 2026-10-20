@@ -343,7 +343,7 @@ function renderRsvp() {
     const status = form.status.value;
     const text = message.value.trim();
     setError('rsvpName', name ? '' : 'Nama belum diisi.');
-    setError('rsvpStatus', status ? '' : 'Pilih salah satu dulu ya.');
+    setError('rsvpStatus', status ? '' : 'Pilih salah satu pilihan kehadiran.');
     setError('rsvpMessage', text ? '' : 'Tulis ucapan singkat untuk mempelai.');
     if (!name || !status || !text) {
       note.textContent = '';
@@ -353,7 +353,7 @@ function renderRsvp() {
 
     const saved = saveWishes([{ name, status, message: text, time: new Date().toISOString() }, ...loadWishes()]);
     note.textContent = saved
-      ? 'Terima kasih, konfirmasi dan ucapanmu sudah tersimpan.'
+      ? 'Terima kasih, konfirmasi dan ucapan sudah tersimpan.'
       : 'Browser ini tidak bisa menyimpan data. Coba matikan mode privat.';
     message.value = '';
     counter.textContent = '0 / 300';
@@ -363,7 +363,7 @@ function renderRsvp() {
 
   box.append(
     el('h2', { class: 'section-title', text: 'Konfirmasi Kehadiran' }),
-    el('p', { class: 'section-lead', text: 'Mohon konfirmasi sebelum 5 Desember 2026, sekalian titip doa untuk kami.' }),
+    el('p', { class: 'section-lead', text: 'Mohon konfirmasi sebelum 5 Desember 2026. Doa dan ucapan juga bisa dititipkan di sini.' }),
     form,
     el('h3', { class: 'wishes-title', text: 'Ucapan dari tamu' }),
     tally,
