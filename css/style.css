@@ -522,33 +522,96 @@ body.is-locked { overflow: hidden; }
 
 #acara .section-inner { display: flex; flex-direction: column; }
 
-.bigdate {
+#acara .section-title { margin-top: 8px; }
+
+.invite-card {
+  position: relative;
+  margin: 32px 0 24px;
+  padding: 40px 28px 36px;
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  outline: 1px solid var(--gold);
+  outline-offset: -8px;
+  background: var(--ivory);
+}
+
+.card-orn {
+  position: absolute;
+  width: 34px;
+  height: 64px;
+  color: var(--gold);
+}
+
+.card-orn-top { top: -34px; right: 20px; transform: rotate(40deg); }
+.card-orn-bottom { left: 20px; bottom: -34px; transform: rotate(220deg); }
+
+.calendar {
+  margin: 32px 0 24px;
+  padding: 24px 20px 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #FFFFFF;
+}
+
+.cal-title {
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+  text-transform: capitalize;
+  text-align: center;
+}
+
+.cal-grid {
   display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
-  column-gap: 16px;
-  align-items: end;
-  margin: 16px 0 40px;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 6px;
+  text-align: center;
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
-.bigdate-num {
-  grid-row: 1 / 3;
-  font-size: clamp(5.5rem, 24vw, 8rem);
-  line-height: 0.8;
-  font-variant-numeric: lining-nums;
-}
-
-.bigdate-day {
-  grid-column: 2;
-  font-family: var(--serif);
-  font-size: 1.75rem;
-  line-height: 1.1;
-}
-
-.bigdate-month {
-  grid-column: 2;
+.cal-head {
+  padding-bottom: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
   color: var(--navy-soft);
 }
+
+.cal-day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 38px;
+  font-size: 0.9375rem;
+}
+
+.cal-day.is-day {
+  font-family: var(--serif);
+  font-size: 1.375rem;
+  font-weight: 600;
+}
+
+.ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 54px;
+  height: 54px;
+  transform: translate(-50%, -50%) rotate(-8deg);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.ring path {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 1.4s var(--ease) 0.3s;
+}
+
+.calendar.is-in .ring path,
+.calendar:not(.reveal) .ring path { stroke-dashoffset: 0; }
 
 .countdown {
   display: grid;
@@ -588,11 +651,11 @@ body.is-locked { overflow: hidden; }
 .events {
   display: grid;
   gap: 24px;
-  margin: 40px 0 24px;
+  margin: 0 0 24px;
 }
 
 .venue {
-  margin: 0 0 32px;
+  margin: 0;
   padding-top: 24px;
   border-top: 1px solid var(--line);
 }
@@ -1173,6 +1236,7 @@ textarea.input { resize: vertical; min-height: 120px; }
   .cover,
   .dock,
   .stage-img,
+  .ring path,
   .seal,
   .shot img { transition: none; }
 }

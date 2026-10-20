@@ -201,31 +201,54 @@ function startCountdown(box) {
   tick();
 }
 
+function calendar(date) {
+  const parts = Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', year: 'numeric', month: 'numeric', day: 'numeric' })
+    .formatToParts(date).map(p => [p.type, Number(p.value)]));
+  const first = new Date(Date.UTC(parts.year, parts.month - 1, 1)).getUTCDay();
+  const total = new Date(Date.UTC(parts.year, parts.month, 0)).getUTCDate();
+  const title = new Intl.DateTimeFormat('id-ID', { month: 'long', year: 'numeric', timeZone: 'Asia/Jakarta' }).format(date);
+
+  const cells = ['Sn', 'Sl', 'Rb', 'Km', 'Jm', 'Sb', 'Mg'].map(d => el('span', { class: 'cal-head', text: d }));
+  for (let i = 0; i < (first + 6) % 7; i++) cells.push(el('span'));
+  for (let d = 1; d <= total; d++) {
+    const cell = el('span', { class: 'cal-day', text: d });
+    if (d === parts.day) {
+      cell.classList.add('is-day');
+      cell.insertAdjacentHTML('beforeend', '<svg class="ring" viewBox="0 0 60 60" aria-hidden="true"><path pathLength="1" d="M31 6C47 5 56 18 55 32 53 47 40 55 27 54 13 52 5 41 6 28 8 15 19 7 35 8"/></svg>');
+    }
+    cells.push(cell);
+  }
+
+  return el('div', { class: 'calendar', role: 'img', 'aria-label': `Kalender ${title}, tanggal ${parts.day} ditandai` }, [
+    el('p', { class: 'cal-title serif', text: title }),
+    el('div', { class: 'cal-grid' }, cells),
+  ]);
+}
+
 function renderEvents() {
   const box = section('acara', 'Waktu dan tempat');
-  const day = new Date(CONFIG.date);
-  const fmt = opts => new Intl.DateTimeFormat('id-ID', { ...opts, timeZone: 'Asia/Jakarta' }).format(day);
   const countdown = el('div', { class: 'countdown', role: 'timer', 'aria-label': 'Hitung mundur' });
 
   box.append(
     el('p', { class: 'eyebrow', text: 'Simpan tanggalnya' }),
-    el('div', { class: 'bigdate' }, [
-      el('span', { class: 'bigdate-day', text: fmt({ weekday: 'long' }) }),
-      el('span', { class: 'bigdate-num serif', text: fmt({ day: 'numeric' }) }),
-      el('span', { class: 'bigdate-month', text: fmt({ month: 'long', year: 'numeric' }) }),
-    ]),
+    el('h2', { class: 'section-title', text: CONFIG.dateLabel }),
+    calendar(new Date(CONFIG.date)),
     countdown,
-    el('div', { class: 'events' }, CONFIG.events.map(ev =>
-      el('div', { class: 'event' }, [
-        el('h3', { class: 'event-name', text: ev.name }),
-        el('p', { class: 'event-line' }, [icon('clock'), el('span', { text: ev.time })]),
-      ])
-    )),
-    el('p', { class: 'event-line venue' }, [icon('map-pin'), el('span', {}, [
-      el('strong', { text: CONFIG.events[0].place }),
-      el('br'),
-      CONFIG.events[0].address,
-    ])]),
+    el('div', { class: 'invite-card' }, [
+      ornament('ranting-2', 'card-orn card-orn-top'),
+      ornament('ranting-2', 'card-orn card-orn-bottom'),
+      el('div', { class: 'events' }, CONFIG.events.map(ev =>
+        el('div', { class: 'event' }, [
+          el('h3', { class: 'event-name', text: ev.name }),
+          el('p', { class: 'event-line' }, [icon('clock'), el('span', { text: ev.time })]),
+        ])
+      )),
+      el('p', { class: 'event-line venue' }, [icon('map-pin'), el('span', {}, [
+        el('strong', { text: CONFIG.events[0].place }),
+        el('br'),
+        CONFIG.events[0].address,
+      ])]),
+    ]),
     el('div', { class: 'event-actions' }, [
       el('a', { class: 'btn-main', href: mapsUrl(CONFIG.events[0]), target: '_blank', rel: 'noopener' }, [icon('map-pin'), 'Lihat Lokasi']),
       el('a', { class: 'btn-main btn-line', href: calendarUrl(), target: '_blank', rel: 'noopener' }, [icon('calendar-plus'), 'Simpan Tanggal']),
