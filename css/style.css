@@ -1160,7 +1160,11 @@ textarea.input { resize: vertical; min-height: 120px; }
   padding: 20px 4px;
 }
 
-.env-card .account { padding: 16px 2px; }
+.env-card .account {
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 2px;
+}
 
 .env-card .account + .account { border-top: 1px solid rgb(184 153 106 / 0.45); }
 
@@ -1203,7 +1207,7 @@ textarea.input { resize: vertical; min-height: 120px; }
 
 .account-number {
   margin: 2px 0;
-  font-size: 1.375rem;
+  font-size: clamp(1.125rem, 5.6vw, 1.375rem);
   font-weight: 500;
   letter-spacing: 0.06em;
   font-variant-numeric: tabular-nums;
@@ -1350,6 +1354,12 @@ textarea.input { resize: vertical; min-height: 120px; }
 
 @media (min-width: 992px) {
   .dock { left: 72%; }
+}
+
+@media (max-width: 359.98px) {
+  .dock { gap: 0; padding: 4px; }
+  .dock-link { width: 40px; }
+  .dock-sep { margin: 0 2px; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
