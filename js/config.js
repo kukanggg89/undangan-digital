@@ -29,7 +29,7 @@ const CONFIG = {
     { date: 'Agustus 2019', title: 'Pertama Bertemu', text: 'Kenalan di UKM fotografi kampus. Raka salah ambil kamera, ternyata punya Nadia.' },
     { date: 'Maret 2021', title: 'Mulai Bersama', text: 'Setelah dua tahun hunting foto bareng, akhirnya sepakat jalan berdua.' },
     { date: 'Juni 2025', title: 'Lamaran', text: 'Raka datang bersama keluarga ke rumah Nadia di Bandung. Jawabannya: iya.' },
-    { date: 'Desember 2026', title: 'Hari Bahagia', text: 'Kami memulai babak baru, dan ingin kamu ikut menjadi saksinya.' },
+    { date: 'Desember 2026', title: 'Hari Bahagia', text: 'Kami memulai babak baru, disaksikan keluarga dan sahabat terdekat.' },
   ],
 
   events: [

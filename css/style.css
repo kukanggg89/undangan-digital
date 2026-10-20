@@ -389,3 +389,66 @@ body.is-locked { overflow: hidden; }
 @media (min-width: 576px) {
   .person { width: 62%; }
 }
+
+.timeline {
+  position: relative;
+  margin: 48px 0 0;
+  padding: 0 0 0 28px;
+  list-style: none;
+}
+
+
+.moment {
+  position: relative;
+  padding-bottom: 40px;
+}
+
+.moment:last-child { padding-bottom: 0; }
+
+.moment::after {
+  content: "";
+  position: absolute;
+  top: 17px;
+  bottom: -8px;
+  left: -24px;
+  width: 1px;
+  background: var(--gold);
+}
+
+.moment:last-child::after { display: none; }
+
+.moment::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: -28px;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  background: var(--blue-light);
+}
+
+.moment-date {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--navy-soft);
+}
+
+.moment-title {
+  margin: 4px 0 8px;
+  font-size: 1.625rem;
+}
+
+.moment-body p { color: var(--navy-soft); }
+
+@media (min-width: 576px) {
+  .moment {
+    display: grid;
+    grid-template-columns: 128px 1fr;
+    gap: 24px;
+  }
+
+  .moment-date { padding-top: 6px; }
+  .moment-title { margin-top: 0; }
+}
