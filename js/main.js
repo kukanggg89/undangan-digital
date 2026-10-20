@@ -491,18 +491,19 @@ function renderGift() {
 
   const envelope = el('div', { class: 'envelope' }, [
     el('div', { class: 'env-back', 'aria-hidden': 'true' }),
+    el('div', { class: 'env-flap', 'aria-hidden': 'true' }, [
+      el('div', { class: 'flap-inner' }),
+      el('div', { class: 'flap-outer' }, el('span', { class: 'env-seal' }, el('span', { text: `${a}${b}` }))),
+    ]),
     card,
     el('div', { class: 'env-pocket', 'aria-hidden': 'true' }),
-    el('div', { class: 'env-flap', 'aria-hidden': 'true' }),
-    el('span', { class: 'env-seal', 'aria-hidden': 'true' }, el('span', { text: `${a}${b}` })),
   ]);
   const stage = el('div', { class: 'env-stage' }, envelope);
   const toggle = el('button', { class: 'btn-main env-toggle', type: 'button', 'aria-controls': 'giftCard', 'aria-expanded': 'false' });
 
   const fit = () => {
-    const h = card.offsetHeight;
-    envelope.style.height = `${h + 28}px`;
-    stage.style.setProperty('--lift', `${Math.round(h * 0.78)}px`);
+    stage.style.setProperty('--env-h', `${envelope.offsetHeight}px`);
+    stage.style.setProperty('--card-h', `${card.offsetHeight}px`);
   };
   const setOpen = open => {
     stage.classList.toggle('is-open', open);
@@ -514,7 +515,9 @@ function renderGift() {
   envelope.addEventListener('click', e => {
     if (!e.target.closest('.env-card')) setOpen(!stage.classList.contains('is-open'));
   });
-  new ResizeObserver(fit).observe(card);
+  const sizer = new ResizeObserver(fit);
+  sizer.observe(card);
+  sizer.observe(envelope);
   setOpen(matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   box.append(

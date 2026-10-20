@@ -23,12 +23,13 @@
 }
 
 @media (min-width: 992px) {
-  :root { --pad: 104px; }
+  :root { --pad: 94px; }
+  html { font-size: 90%; }
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; overflow-anchor: none; }
 
 body {
   margin: 0;
@@ -335,7 +336,7 @@ body.is-locked { overflow: hidden; }
 
   .stage-img.is-on { opacity: 1; }
 
-  .section { padding: var(--pad) 56px; }
+  .section { padding: var(--pad) 50px; }
 }
 
 .o-ranting-1 { --o: url(../assets/svg/ranting-1.svg); }
@@ -1068,61 +1069,116 @@ textarea.input { resize: vertical; min-height: 120px; }
 }
 
 .env-stage {
-  --lift: 0px;
+  --env-h: 220px;
+  --card-h: 260px;
+  --drop: calc(var(--card-h) - 12px);
+  --ease-out: cubic-bezier(0.22, 0.8, 0.24, 1);
+  --ease-io: cubic-bezier(0.55, 0, 0.3, 1);
+  position: relative;
+  height: var(--env-h);
   margin-top: 40px;
-  padding-top: 0;
-  transition: padding-top 0.8s var(--ease) 0.15s;
+  transition: height 0.85s var(--ease-io);
 }
 
-.env-stage.is-open { padding-top: var(--lift); }
+.env-stage.is-open {
+  height: calc(var(--drop) + var(--env-h));
+  transition: height 1s var(--ease-out) 0.5s;
+}
 
 .envelope {
-  position: relative;
-  max-width: 460px;
-  min-height: 220px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  max-width: 440px;
   margin: 0 auto;
-  perspective: 1200px;
+  aspect-ratio: 3 / 2;
+  perspective: 900px;
   cursor: pointer;
+  transition: transform 0.85s var(--ease-io);
+}
+
+.is-open .envelope {
+  transform: translateY(var(--drop));
+  transition: transform 1s var(--ease-out) 0.5s;
 }
 
 .env-back,
-.env-pocket,
-.env-flap {
+.env-pocket {
   position: absolute;
-  left: 0;
-  right: 0;
-  border-radius: 8px;
+  inset: 0;
+  border-radius: 6px;
 }
 
 .env-back {
-  top: 0;
-  bottom: 0;
-  background: #CBD6E1;
+  z-index: 0;
+  background: #D9CAB0;
 }
 
 .env-pocket {
   z-index: 3;
-  bottom: 0;
-  height: 72%;
-  background: linear-gradient(170deg, #E9EEF3, #DCE4EC);
-  clip-path: polygon(0 0, 50% 38%, 100% 0, 100% 100%, 0 100%);
-  box-shadow: inset 0 -1px 0 rgb(184 153 106 / 0.6);
+  background: linear-gradient(180deg, #F2EADC, #E9DDC8);
+  box-shadow: 0 10px 28px rgb(44 62 80 / 0.12), inset 0 0 0 1px rgb(184 153 106 / 0.35);
+}
+
+.env-pocket::before,
+.env-pocket::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.env-pocket::before {
+  background: linear-gradient(180deg, #ECE2D0, #E3D5BD);
+  clip-path: polygon(0 0, 50% 56%, 100% 0, 100% 100%, 50% 56%, 0 100%);
+}
+
+.env-pocket::after {
+  background: linear-gradient(0deg, #F4EDE1, #EDE3D2);
+  clip-path: polygon(0 100%, 50% 50%, 100% 100%);
+  box-shadow: inset 0 -1px 0 rgb(184 153 106 / 0.5);
 }
 
 .env-flap {
+  position: absolute;
   z-index: 4;
   top: 0;
+  left: 0;
+  right: 0;
   height: 58%;
-  background: linear-gradient(180deg, #D5DEE8, #C6D2DE);
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
   transform-origin: top;
-  transition: transform 0.7s var(--ease), z-index 0s linear 0.35s;
+  transform-style: preserve-3d;
+  transition: transform 0.75s var(--ease-io) 0.75s, z-index 0s linear 1.12s;
+}
+
+.flap-outer,
+.flap-inner {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+}
+
+.flap-outer::before,
+.flap-inner {
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+.flap-outer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #E6D9C2, #DCCBAE);
+}
+
+.flap-inner {
+  background: linear-gradient(0deg, #F6F0E4, #EEE4D2);
+  transform: rotateX(180deg);
 }
 
 .env-seal {
   position: absolute;
-  z-index: 5;
-  top: 58%;
+  top: 100%;
   left: 50%;
   display: grid;
   place-items: center;
@@ -1130,44 +1186,43 @@ textarea.input { resize: vertical; min-height: 120px; }
   height: 52px;
   border-radius: 50%;
   background: radial-gradient(circle at 34% 30%, #4B6178 0%, var(--navy) 55%, #1C2935 100%);
-  box-shadow: 0 0 0 3px rgb(184 153 106 / 0.5);
-  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 3px rgb(184 153 106 / 0.55), 0 4px 10px rgb(44 62 80 / 0.25);
+  transform: translate(-50%, -62%);
   font-family: var(--serif);
   font-size: 1.125rem;
   font-weight: 600;
   color: #E3CFA6;
-  transition: opacity 0.3s;
-}
-
-.env-card {
-  position: absolute;
-  z-index: 2;
-  left: 5%;
-  right: 5%;
-  bottom: 14px;
-  padding: 4px 18px;
-  border-radius: 8px;
-  background: var(--navy);
-  color: var(--ivory);
-  outline: 1px solid rgb(184 153 106 / 0.7);
-  outline-offset: -6px;
-  box-shadow: var(--shadow);
-  cursor: default;
-  clip-path: inset(52% -12px -12px -12px);
-  transition: transform 0.8s var(--ease) 0.15s, clip-path 0.4s var(--ease) 0.1s;
 }
 
 .is-open .env-flap {
   z-index: 1;
   transform: rotateX(180deg);
-  transition: transform 0.7s var(--ease), z-index 0s;
+  transition: transform 0.75s var(--ease-io), z-index 0s linear 0.38s;
 }
 
-.is-open .env-seal { opacity: 0; }
+.env-card {
+  position: absolute;
+  z-index: 2;
+  top: 16px;
+  left: 0;
+  right: 0;
+  width: 90%;
+  margin: 0 auto;
+  padding: 4px 18px 32px;
+  border-radius: 8px;
+  background: var(--navy);
+  color: var(--ivory);
+  outline: 1px solid rgb(184 153 106 / 0.7);
+  outline-offset: -6px;
+  cursor: default;
+  clip-path: inset(-24px -24px max(-24px, calc(16px + var(--card-h) - var(--env-h))) -24px);
+  transition: transform 0.85s var(--ease-io), clip-path 0.85s var(--ease-io);
+}
 
 .is-open .env-card {
-  clip-path: inset(-12px -12px -12px -12px);
-  transform: translateY(calc(var(--lift) * -1));
+  clip-path: inset(-24px -24px -24px -24px);
+  transform: translateY(calc(var(--drop) * -1));
+  transition: transform 1s var(--ease-out) 0.5s, clip-path 1s var(--ease-out) 0.5s;
 }
 
 .account,
@@ -1546,9 +1601,10 @@ body::before {
   .ring path,
   .seal,
   .env-stage,
+  .envelope,
   .env-flap,
   .env-card,
-  .shot img { transition: none; }
+  .shot img { transition: none !important; }
 
   .eq span { animation: none; transform: scaleY(0.6); }
 }
