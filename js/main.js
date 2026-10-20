@@ -569,7 +569,9 @@ function renderDock() {
     const playing = !music.paused;
     musicBtn.setAttribute('aria-pressed', String(playing));
     musicBtn.setAttribute('aria-label', playing ? 'Matikan musik' : 'Putar musik');
-    musicBtn.replaceChildren(icon(playing ? 'music-double-note' : 'sound-off'));
+    musicBtn.replaceChildren(playing
+      ? el('span', { class: 'eq', 'aria-hidden': 'true' }, [el('span'), el('span'), el('span')])
+      : icon('sound-off'));
   };
   musicBtn.addEventListener('click', () => {
     if (music.paused) music.play().catch(() => {});
