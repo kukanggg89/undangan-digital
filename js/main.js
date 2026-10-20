@@ -356,6 +356,64 @@ function renderRsvp() {
   draw();
 }
 
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    const area = el('textarea', { style: 'position:fixed;opacity:0' });
+    area.value = text;
+    document.body.append(area);
+    area.select();
+    const ok = document.execCommand('copy');
+    area.remove();
+    return ok;
+  }
+}
+
+function copyButton(text, label) {
+  const btn = el('button', { class: 'copy-btn', type: 'button', 'aria-label': label }, [icon('copy'), el('span', { text: 'Salin' })]);
+  btn.addEventListener('click', async () => {
+    const ok = await copyText(text);
+    btn.replaceChildren(icon(ok ? 'check' : 'copy'), el('span', { text: ok ? 'Tersalin' : 'Gagal' }));
+    btn.classList.toggle('is-done', ok);
+    clearTimeout(btn.timer);
+    btn.timer = setTimeout(() => {
+      btn.replaceChildren(icon('copy'), el('span', { text: 'Salin' }));
+      btn.classList.remove('is-done');
+    }, 2000);
+  });
+  return btn;
+}
+
+function renderGift() {
+  const { accounts, receiver, address } = CONFIG.gift;
+  const box = section('hadiah', 'Amplop digital', 'section-alt');
+  box.append(
+    el('h2', { class: 'section-title', text: 'Tanda Kasih' }),
+    el('p', { class: 'section-lead', text: 'Doa restu sudah lebih dari cukup. Bila ingin memberi tanda kasih, bisa lewat rekening atau alamat di bawah.' }),
+    el('ul', { class: 'accounts' }, accounts.map(acc =>
+      el('li', { class: 'account' }, [
+        el('div', {}, [
+          el('p', { class: 'account-bank', text: acc.bank }),
+          el('p', { class: 'account-number', text: acc.number }),
+          el('p', { class: 'account-holder', text: `a.n. ${acc.holder}` }),
+        ]),
+        copyButton(acc.number, `Salin nomor rekening ${acc.bank}`),
+      ])
+    )),
+    el('div', { class: 'gift-address' }, [
+      icon('gift'),
+      el('div', {}, [
+        el('p', { class: 'account-bank', text: 'Kirim kado' }),
+        el('p', { class: 'gift-receiver', text: receiver }),
+        el('p', { class: 'account-holder', text: address }),
+      ]),
+      copyButton(`${receiver}, ${address}`, 'Salin alamat kirim kado'),
+    ]),
+  );
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.title = `The Wedding of ${CONFIG.couple.short}`;
   renderCover();
@@ -366,4 +424,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderEvents();
   renderGallery();
   renderRsvp();
+  renderGift();
 });

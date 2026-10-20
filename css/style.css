@@ -804,3 +804,79 @@ textarea.input { resize: vertical; min-height: 120px; }
 }
 
 .wishes-more { margin-top: 16px; width: 100%; }
+
+.accounts {
+  margin: 40px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.account,
+.gift-address {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.account-bank {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--navy-soft);
+}
+
+.account-number {
+  margin: 2px 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+.account-holder {
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: var(--navy-soft);
+}
+
+.gift-address { align-items: flex-start; justify-content: flex-start; }
+.gift-address > .ic { margin-top: 2px; font-size: 1.25rem; }
+.gift-address > div { flex: 1; }
+.gift-address .copy-btn { align-self: center; }
+
+.gift-receiver {
+  margin: 2px 0;
+  font-family: var(--serif);
+  font-size: 1.375rem;
+  line-height: 1.2;
+}
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  flex: none;
+  min-width: 112px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid rgb(44 62 80 / 0.32);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--navy);
+  font: 500 0.875rem var(--sans);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, transform 0.2s var(--ease);
+}
+
+.copy-btn:hover { border-color: var(--navy); }
+.copy-btn:active { transform: scale(0.98); }
+
+.copy-btn.is-done {
+  border-color: var(--navy);
+  background: var(--navy);
+  color: var(--ivory);
+}
