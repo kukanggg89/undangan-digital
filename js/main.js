@@ -486,10 +486,32 @@ function renderDock() {
   NAV.forEach(([id]) => observer.observe($(`#${id}`)));
 }
 
+const STAGE_MAP = { home: 0, mempelai: 0, kisah: 1, acara: 1, galeri: 2, rsvp: 2, hadiah: 3, penutup: 3 };
+
+function renderStage() {
+  const media = matchMedia('(min-width: 992px)');
+  const build = () => {
+    if (!media.matches || $('#stage').childElementCount) return;
+    const imgs = CONFIG.hero.map((src, i) =>
+      el('img', { class: `stage-img${i === 0 ? ' is-on' : ''}`, src, alt: '', loading: i === 0 ? 'eager' : 'lazy' }));
+    $('#stage').append(...imgs);
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const index = STAGE_MAP[entry.target.id] ?? 0;
+        imgs.forEach((img, i) => img.classList.toggle('is-on', i === index));
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    Object.keys(STAGE_MAP).forEach(id => observer.observe($(`#${id}`)));
+  };
+  build();
+  media.addEventListener('change', build);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.title = `The Wedding of ${CONFIG.couple.short}`;
   renderCover();
-  $('#stageImg').src = CONFIG.hero[0];
   renderOpening();
   renderCouple();
   renderStory();
@@ -499,4 +521,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderGift();
   renderClosing();
   renderDock();
+  renderStage();
 });

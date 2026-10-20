@@ -260,11 +260,17 @@ body.is-locked { overflow: hidden; }
   }
 
   .stage-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: 50% 30%;
+    opacity: 0;
+    transition: opacity 1.2s var(--ease);
   }
+
+  .stage-img.is-on { opacity: 1; }
 
   .section { padding: var(--pad) 56px; }
 }
@@ -1014,6 +1020,7 @@ textarea.input { resize: vertical; min-height: 120px; }
 @media (prefers-reduced-motion: reduce) {
   .cover,
   .dock,
+  .stage-img,
   .shot img { transition: none; }
 }
 
