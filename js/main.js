@@ -19,6 +19,10 @@ function icon(name) {
   return el('span', { class: `ic i-${name}`, 'aria-hidden': 'true' });
 }
 
+function initials() {
+  return [CONFIG.couple.groom.nick[0], CONFIG.couple.bride.nick[0]];
+}
+
 function guestName() {
   const raw = new URLSearchParams(location.search).get('to');
   const name = raw ? raw.replace(/\s+/g, ' ').trim().slice(0, 60) : '';
@@ -34,7 +38,10 @@ function renderCover() {
   $('#coverNames').textContent = CONFIG.couple.short;
   $('#coverDate').textContent = CONFIG.dateLabel;
   $('#guestName').textContent = guestName();
-  $('#openBtn').append(icon('mail-open'), 'Buka Undangan');
+  $('#openBtn').append(
+    el('span', { class: 'seal', 'aria-hidden': 'true' }, el('span', { class: 'seal-text', text: initials().join('') })),
+    el('span', { class: 'seal-label' }, [icon('mail-open'), 'Buka Undangan']),
+  );
   $('#openBtn').addEventListener('click', openInvitation);
 }
 
@@ -69,6 +76,19 @@ function ornament(name, cls = '') {
   return el('span', { class: `orn o-${name} ${cls}`.trim(), 'aria-hidden': 'true' });
 }
 
+function monogram(cls = '') {
+  const [a, b] = initials();
+  return el('div', { class: `monogram ${cls}`.trim(), 'aria-hidden': 'true' }, [
+    ornament('ranting-1', 'mono-orn mono-orn-left'),
+    el('div', { class: 'mono-ring' }, [
+      el('span', { text: a }),
+      el('span', { class: 'mono-amp', text: '&' }),
+      el('span', { text: b }),
+    ]),
+    ornament('ranting-1', 'mono-orn'),
+  ]);
+}
+
 function section(id, label, cls = '') {
   const inner = el('div', { class: 'section-inner' });
   const node = el('section', { id, class: `section ${cls}`.trim(), 'aria-label': label }, inner);
@@ -81,7 +101,7 @@ function renderOpening() {
   const box = section('home', 'Pembuka', 'opening');
   box.append(
     el('div', { class: 'opening-photo' }, el('img', { src: CONFIG.hero[0], alt: `Foto ${CONFIG.couple.short}`, loading: 'lazy' })),
-    ornament('ranting-3', 'opening-orn'),
+    monogram('opening-mono'),
     el('p', { class: 'opening-greeting serif', text: o.greeting }),
     el('p', { class: 'opening-intro', text: o.intro }),
     el('blockquote', { class: 'quote' }, [
@@ -439,7 +459,7 @@ function renderClosing() {
     el('p', { class: 'closing-text', text: 'Merupakan kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.' }),
     el('p', { class: 'closing-text', text: 'Wassalamu’alaikum Warahmatullahi Wabarakatuh' }),
     el('div', { class: 'closing-sign' }, [
-      ornament('ranting-1', 'closing-orn'),
+      monogram('closing-mono'),
       el('p', { text: 'Kami yang berbahagia,' }),
       el('p', { class: 'closing-names serif', text: CONFIG.couple.short }),
     ]),
