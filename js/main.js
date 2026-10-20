@@ -48,8 +48,57 @@ function openInvitation() {
   $('#app').focus({ preventScroll: true });
 }
 
+function ornament(name, cls = '') {
+  return el('span', { class: `orn o-${name} ${cls}`.trim(), 'aria-hidden': 'true' });
+}
+
+function section(id, label, cls = '') {
+  const inner = el('div', { class: 'section-inner' });
+  const node = el('section', { id, class: `section ${cls}`.trim(), 'aria-label': label }, inner);
+  $('#app').append(node);
+  return inner;
+}
+
+function renderOpening() {
+  const o = CONFIG.opening;
+  const box = section('home', 'Pembuka', 'opening');
+  box.append(
+    el('div', { class: 'opening-photo' }, el('img', { src: CONFIG.hero[0], alt: `Foto ${CONFIG.couple.short}`, loading: 'lazy' })),
+    ornament('ranting-3', 'opening-orn'),
+    el('p', { class: 'opening-greeting serif', text: o.greeting }),
+    el('p', { class: 'opening-intro', text: o.intro }),
+    el('blockquote', { class: 'quote' }, [
+      el('p', { text: o.quote }),
+      el('cite', { text: o.source }),
+    ]),
+  );
+}
+
+function person(p, side) {
+  return el('figure', { class: `person person-${side}` }, [
+    el('div', { class: 'arch' }, el('img', { src: p.photo, alt: p.name, loading: 'lazy', width: 800, height: 1067 })),
+    el('figcaption', {}, [
+      el('h3', { class: 'person-name', text: p.name }),
+      el('p', { class: 'person-parents', text: p.parents }),
+    ]),
+  ]);
+}
+
+function renderCouple() {
+  const { groom, bride } = CONFIG.couple;
+  const box = section('mempelai', 'Kedua mempelai');
+  box.append(
+    el('h2', { class: 'section-title', text: 'Kedua Mempelai' }),
+    person(groom, 'left'),
+    el('p', { class: 'amp serif', text: '&', 'aria-hidden': 'true' }),
+    person(bride, 'right'),
+  );
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.title = `The Wedding of ${CONFIG.couple.short}`;
   renderCover();
   $('#stageImg').src = CONFIG.hero[0];
+  renderOpening();
+  renderCouple();
 });
