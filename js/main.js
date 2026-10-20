@@ -476,19 +476,52 @@ function copyButton(text, label) {
 function renderGift() {
   const { accounts, receiver, address } = CONFIG.gift;
   const box = section('hadiah', 'Amplop digital', 'section-alt');
+  const [a, b] = initials();
+
+  const card = el('div', { class: 'env-card', id: 'giftCard' }, accounts.map(acc =>
+    el('div', { class: 'account' }, [
+      el('div', {}, [
+        el('p', { class: 'account-bank', text: acc.bank }),
+        el('p', { class: 'account-number', text: acc.number.replace(/(\d{4})(?=\d)/g, '$1 ') }),
+        el('p', { class: 'account-holder', text: `a.n. ${acc.holder}` }),
+      ]),
+      copyButton(acc.number, `Salin nomor rekening ${acc.bank}`),
+    ])
+  ));
+
+  const envelope = el('div', { class: 'envelope' }, [
+    el('div', { class: 'env-back', 'aria-hidden': 'true' }),
+    card,
+    el('div', { class: 'env-pocket', 'aria-hidden': 'true' }),
+    el('div', { class: 'env-flap', 'aria-hidden': 'true' }),
+    el('span', { class: 'env-seal', 'aria-hidden': 'true' }, el('span', { text: `${a}${b}` })),
+  ]);
+  const stage = el('div', { class: 'env-stage' }, envelope);
+  const toggle = el('button', { class: 'btn-main env-toggle', type: 'button', 'aria-controls': 'giftCard', 'aria-expanded': 'false' });
+
+  const fit = () => {
+    const h = card.offsetHeight;
+    envelope.style.height = `${h + 28}px`;
+    stage.style.setProperty('--lift', `${Math.round(h * 0.78)}px`);
+  };
+  const setOpen = open => {
+    stage.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.replaceChildren(icon('mail-open'), open ? 'Tutup amplop' : 'Buka amplop');
+    card.inert = !open;
+  };
+  toggle.addEventListener('click', () => setOpen(!stage.classList.contains('is-open')));
+  envelope.addEventListener('click', e => {
+    if (!e.target.closest('.env-card')) setOpen(!stage.classList.contains('is-open'));
+  });
+  new ResizeObserver(fit).observe(card);
+  setOpen(matchMedia('(prefers-reduced-motion: reduce)').matches);
+
   box.append(
     el('h2', { class: 'section-title', text: 'Tanda Kasih' }),
     el('p', { class: 'section-lead', text: 'Doa restu sudah lebih dari cukup. Bila ingin memberi tanda kasih, bisa lewat rekening atau alamat di bawah.' }),
-    el('ul', { class: 'accounts' }, accounts.map(acc =>
-      el('li', { class: 'account' }, [
-        el('div', {}, [
-          el('p', { class: 'account-bank', text: acc.bank }),
-          el('p', { class: 'account-number', text: acc.number }),
-          el('p', { class: 'account-holder', text: `a.n. ${acc.holder}` }),
-        ]),
-        copyButton(acc.number, `Salin nomor rekening ${acc.bank}`),
-      ])
-    )),
+    stage,
+    toggle,
     el('div', { class: 'gift-address' }, [
       icon('gift'),
       el('div', {}, [
