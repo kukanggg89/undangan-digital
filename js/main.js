@@ -189,6 +189,38 @@ function renderEvents() {
   startCountdown(countdown);
 }
 
+function renderGallery() {
+  const box = section('galeri', 'Galeri', 'section-alt');
+  const grid = el('div', { class: 'gallery' }, CONFIG.gallery.map((src, i) =>
+    el('button', { class: 'shot', type: 'button', 'data-index': i, 'aria-label': `Buka foto ${i + 1}` },
+      el('img', { src, alt: `Foto ${CONFIG.couple.short} ${i + 1}`, loading: 'lazy' }))
+  ));
+  box.append(el('h2', { class: 'section-title', text: 'Galeri' }), grid);
+
+  const modalEl = $('#lightbox');
+  const modal = new bootstrap.Modal(modalEl);
+  let current = 0;
+
+  const show = i => {
+    current = (i + CONFIG.gallery.length) % CONFIG.gallery.length;
+    $('#lbImg').src = CONFIG.gallery[current];
+    $('#lbImg').alt = `Foto ${CONFIG.couple.short} ${current + 1}`;
+  };
+
+  grid.addEventListener('click', e => {
+    const shot = e.target.closest('.shot');
+    if (!shot) return;
+    show(Number(shot.dataset.index));
+    modal.show();
+  });
+  $('.lb-prev').addEventListener('click', () => show(current - 1));
+  $('.lb-next').addEventListener('click', () => show(current + 1));
+  modalEl.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.title = `The Wedding of ${CONFIG.couple.short}`;
   renderCover();
@@ -197,4 +229,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCouple();
   renderStory();
   renderEvents();
+  renderGallery();
 });
