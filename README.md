@@ -2,6 +2,8 @@
 
 Tugas 4 PBP, bikin undangan pernikahan digital satu halaman. Pasangannya fiktif, cuma buat contoh.
 
+Link: https://undangan-digital-one-chi.vercel.app/?to=Nama%20Tamu
+
 ## Fitur
 
 - Nama tamu otomatis dari link, contoh `?to=Budi`
