@@ -51,4 +51,5 @@ function openInvitation() {
 document.addEventListener('DOMContentLoaded', () => {
   document.title = `The Wedding of ${CONFIG.couple.short}`;
   renderCover();
+  $('#stageImg').src = CONFIG.hero[0];
 });
