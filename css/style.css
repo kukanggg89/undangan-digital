@@ -628,3 +628,179 @@ body.is-locked { overflow: hidden; }
 @media (max-width: 767.98px) {
   .lb-prev, .lb-next { top: auto; bottom: 12px; transform: none; }
 }
+
+.section-lead {
+  margin-top: 12px;
+  color: var(--navy-soft);
+}
+
+.rsvp-form {
+  display: grid;
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.rsvp-form .btn-main { justify-self: start; }
+
+.field { display: grid; gap: 8px; }
+
+.field-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid rgb(44 62 80 / 0.32);
+  border-radius: 4px;
+  background: #FFFFFF;
+  color: var(--navy);
+  font: 1rem var(--sans);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+textarea.input { resize: vertical; min-height: 120px; }
+
+.input:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgb(143 165 186 / 0.45);
+}
+
+.input[aria-invalid="true"] { border-color: #A23B3B; }
+
+.field-hint {
+  font-size: 0.8125rem;
+  color: var(--navy-soft);
+  text-align: right;
+}
+
+.field-error {
+  font-size: 0.875rem;
+  color: #A23B3B;
+}
+
+.field-error:empty { display: none; }
+
+.choices {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.choice { position: relative; }
+
+.choice input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+}
+
+.choice span {
+  display: grid;
+  place-items: center;
+  min-height: 48px;
+  padding: 8px;
+  border: 1px solid rgb(44 62 80 / 0.32);
+  border-radius: 4px;
+  background: #FFFFFF;
+  font-size: 0.875rem;
+  text-align: center;
+  line-height: 1.3;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.choice input:checked + span {
+  border-color: var(--navy);
+  background: var(--navy);
+  color: var(--ivory);
+}
+
+.choice input:focus-visible + span {
+  outline: 2px solid var(--navy);
+  outline-offset: 2px;
+}
+
+.form-note {
+  font-size: 0.9375rem;
+  color: var(--navy);
+}
+
+.form-note:empty { display: none; }
+
+.wishes-title {
+  margin-top: 64px;
+  font-size: 1.75rem;
+}
+
+.tally {
+  display: flex;
+  gap: 32px;
+  margin: 16px 0 24px;
+}
+
+.tally-item {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8125rem;
+  color: var(--navy-soft);
+}
+
+.tally-num {
+  font-size: 2rem;
+  line-height: 1.1;
+  font-variant-numeric: lining-nums;
+  color: var(--navy);
+}
+
+.wishes {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.wish {
+  padding: 20px;
+  border-radius: 8px;
+  background: var(--blue-light);
+}
+
+.wish-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.wish-name {
+  font-family: var(--serif);
+  font-size: 1.375rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.wish-status {
+  flex: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--navy-soft);
+}
+
+.wish-text {
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+}
+
+.wish-time {
+  margin-top: 12px;
+  font-size: 0.8125rem;
+  font-weight: 300;
+  color: var(--navy-soft);
+}
+
+.wishes-more { margin-top: 16px; width: 100%; }

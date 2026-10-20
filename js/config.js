@@ -56,8 +56,13 @@ const CONFIG = {
   hero: ['assets/img/gallery-2.webp', 'assets/img/gallery-3.webp', 'assets/img/gallery-4.webp', 'assets/img/gallery-6.webp'],
 
   gallery: [
-    'assets/img/gallery-1.webp', 'assets/img/gallery-2.webp', 'assets/img/gallery-3.webp', 'assets/img/gallery-4.webp',
-    'assets/img/gallery-5.webp', 'assets/img/gallery-6.webp', 'assets/img/gallery-7.webp',
+    { src: 'assets/img/gallery-1.webp', w: 1200, h: 1600 },
+    { src: 'assets/img/gallery-2.webp', w: 1067, h: 1600 },
+    { src: 'assets/img/gallery-3.webp', w: 1067, h: 1600 },
+    { src: 'assets/img/gallery-4.webp', w: 1200, h: 1600 },
+    { src: 'assets/img/gallery-5.webp', w: 1600, h: 1200 },
+    { src: 'assets/img/gallery-6.webp', w: 1600, h: 1067 },
+    { src: 'assets/img/gallery-7.webp', w: 1200, h: 1600 },
   ],
 
   gift: {

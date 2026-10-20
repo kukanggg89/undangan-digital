@@ -191,9 +191,9 @@ function renderEvents() {
 
 function renderGallery() {
   const box = section('galeri', 'Galeri', 'section-alt');
-  const grid = el('div', { class: 'gallery' }, CONFIG.gallery.map((src, i) =>
+  const grid = el('div', { class: 'gallery' }, CONFIG.gallery.map((photo, i) =>
     el('button', { class: 'shot', type: 'button', 'data-index': i, 'aria-label': `Buka foto ${i + 1}` },
-      el('img', { src, alt: `Foto ${CONFIG.couple.short} ${i + 1}`, loading: 'lazy' }))
+      el('img', { src: photo.src, width: photo.w, height: photo.h, alt: `Foto ${CONFIG.couple.short} ${i + 1}`, loading: 'lazy' }))
   ));
   box.append(el('h2', { class: 'section-title', text: 'Galeri' }), grid);
 
@@ -203,7 +203,7 @@ function renderGallery() {
 
   const show = i => {
     current = (i + CONFIG.gallery.length) % CONFIG.gallery.length;
-    $('#lbImg').src = CONFIG.gallery[current];
+    $('#lbImg').src = CONFIG.gallery[current].src;
     $('#lbImg').alt = `Foto ${CONFIG.couple.short} ${current + 1}`;
   };
 
@@ -221,6 +221,141 @@ function renderGallery() {
   });
 }
 
+const STORE_KEY = 'rsvp-raka-nadia';
+const STATUS = { hadir: 'Hadir', ragu: 'Masih ragu', tidak: 'Tidak hadir' };
+
+function loadWishes() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORE_KEY));
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveWishes(list) {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(list));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function field(id, label, control, hint) {
+  return el('div', { class: 'field' }, [
+    el('label', { class: 'field-label', for: id, text: label }),
+    control,
+    hint,
+    el('p', { class: 'field-error', id: `${id}Error`, 'aria-live': 'polite' }),
+  ]);
+}
+
+function renderRsvp() {
+  const box = section('rsvp', 'Konfirmasi kehadiran dan ucapan');
+  const guest = guestName();
+  const nameInput = el('input', { class: 'input', id: 'rsvpName', name: 'name', maxlength: 60, autocomplete: 'name' });
+  if (guest !== 'Tamu Undangan') nameInput.value = guest;
+
+  const choices = el('div', { class: 'choices', role: 'radiogroup', 'aria-labelledby': 'rsvpStatusLabel' },
+    Object.entries(STATUS).map(([value, label]) =>
+      el('label', { class: 'choice' }, [
+        el('input', { type: 'radio', name: 'status', value }),
+        el('span', { text: label }),
+      ])
+    ));
+
+  const message = el('textarea', { class: 'input', id: 'rsvpMessage', name: 'message', rows: 4, maxlength: 300 });
+  const counter = el('p', { class: 'field-hint', text: '0 / 300' });
+  message.addEventListener('input', () => { counter.textContent = `${message.value.length} / 300`; });
+
+  const statusField = el('div', { class: 'field' }, [
+    el('p', { class: 'field-label', id: 'rsvpStatusLabel', text: 'Kehadiran' }),
+    choices,
+    el('p', { class: 'field-error', id: 'rsvpStatusError', 'aria-live': 'polite' }),
+  ]);
+
+  const note = el('p', { class: 'form-note', role: 'status' });
+  const form = el('form', { class: 'rsvp-form', novalidate: '' }, [
+    field('rsvpName', 'Nama', nameInput),
+    statusField,
+    field('rsvpMessage', 'Ucapan & doa', message, counter),
+    el('button', { class: 'btn-main', type: 'submit' }, [icon('send'), 'Kirim']),
+    note,
+  ]);
+
+  const tally = el('div', { class: 'tally' });
+  const list = el('ul', { class: 'wishes' });
+  const more = el('button', { class: 'btn-main btn-line wishes-more', type: 'button' });
+  let expanded = false;
+
+  const draw = () => {
+    const all = [...loadWishes(), ...CONFIG.dummyWishes];
+    const count = key => all.filter(w => w.status === key).length;
+    tally.replaceChildren(...Object.entries(STATUS).map(([key, label]) =>
+      el('p', { class: 'tally-item' }, [el('span', { class: 'tally-num serif', text: count(key) }), el('span', { text: label })])
+    ));
+
+    const shown = expanded ? all : all.slice(0, 4);
+    list.replaceChildren(...shown.map(w => {
+      const time = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(w.time));
+      return el('li', { class: 'wish' }, [
+        el('div', { class: 'wish-head' }, [
+          el('p', { class: 'wish-name', text: w.name }),
+          el('p', { class: `wish-status is-${w.status}`, text: STATUS[w.status] || '' }),
+        ]),
+        el('p', { class: 'wish-text', text: w.message }),
+        el('p', { class: 'wish-time', text: time }),
+      ]);
+    }));
+    more.hidden = all.length <= 4;
+    more.textContent = expanded ? 'Tampilkan lebih sedikit' : `Lihat semua ucapan (${all.length})`;
+  };
+
+  more.addEventListener('click', () => { expanded = !expanded; draw(); });
+
+  const setError = (id, msg) => {
+    $(`#${id}Error`).textContent = msg;
+    const input = $(`#${id}`);
+    if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+  };
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const name = nameInput.value.trim();
+    const status = form.status.value;
+    const text = message.value.trim();
+    setError('rsvpName', name ? '' : 'Nama belum diisi.');
+    setError('rsvpStatus', status ? '' : 'Pilih salah satu dulu ya.');
+    setError('rsvpMessage', text ? '' : 'Tulis ucapan singkat untuk mempelai.');
+    if (!name || !status || !text) {
+      note.textContent = '';
+      form.querySelector('[aria-invalid="true"], .choices input')?.focus();
+      return;
+    }
+
+    const saved = saveWishes([{ name, status, message: text, time: new Date().toISOString() }, ...loadWishes()]);
+    note.textContent = saved
+      ? 'Terima kasih, konfirmasi dan ucapanmu sudah tersimpan.'
+      : 'Browser ini tidak bisa menyimpan data. Coba matikan mode privat.';
+    message.value = '';
+    counter.textContent = '0 / 300';
+    form.querySelectorAll('input[name="status"]').forEach(r => { r.checked = false; });
+    draw();
+  });
+
+  box.append(
+    el('h2', { class: 'section-title', text: 'Konfirmasi Kehadiran' }),
+    el('p', { class: 'section-lead', text: 'Mohon konfirmasi sebelum 5 Desember 2026, sekalian titip doa untuk kami.' }),
+    form,
+    el('h3', { class: 'wishes-title', text: 'Ucapan dari tamu' }),
+    tally,
+    list,
+    more,
+  );
+  draw();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.title = `The Wedding of ${CONFIG.couple.short}`;
   renderCover();
@@ -230,4 +365,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderStory();
   renderEvents();
   renderGallery();
+  renderRsvp();
 });
