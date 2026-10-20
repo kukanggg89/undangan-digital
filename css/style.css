@@ -37,9 +37,20 @@ h1, h2, h3, .serif {
   line-height: 1.1;
   color: var(--navy);
   margin: 0;
+  text-wrap: balance;
 }
 
-p { margin: 0; }
+p { margin: 0; text-wrap: pretty; }
+
+.section-title,
+.cover-names,
+.closing-names,
+.person-nick { letter-spacing: -0.01em; }
+
+.section-lead,
+.opening-intro,
+.closing-text,
+.quote { max-width: 62ch; }
 
 img { display: block; max-width: 100%; height: auto; }
 
@@ -377,7 +388,7 @@ body.is-locked { overflow: hidden; }
   margin-top: 12px;
   font-size: 0.875rem;
   font-style: normal;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--navy-soft);
 }
 
@@ -445,7 +456,7 @@ body.is-locked { overflow: hidden; }
 .person-parents {
   margin-top: 8px;
   font-size: 0.875rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--navy-soft);
 }
 
@@ -881,7 +892,7 @@ textarea.input { resize: vertical; min-height: 120px; }
 .tally-num {
   font-size: 2rem;
   line-height: 1.1;
-  font-variant-numeric: lining-nums;
+  font-variant-numeric: lining-nums tabular-nums;
   color: var(--navy);
 }
 
