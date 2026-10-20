@@ -19,6 +19,36 @@ function icon(name) {
   return el('span', { class: `ic i-${name}`, 'aria-hidden': 'true' });
 }
 
+function guestName() {
+  const raw = new URLSearchParams(location.search).get('to');
+  const name = raw ? raw.replace(/\s+/g, ' ').trim().slice(0, 60) : '';
+  return name || 'Tamu Undangan';
+}
+
+const music = new Audio();
+music.loop = true;
+music.preload = 'none';
+
+function renderCover() {
+  $('#coverImg').src = CONFIG.cover;
+  $('#coverNames').textContent = CONFIG.couple.short;
+  $('#coverDate').textContent = CONFIG.dateLabel;
+  $('#guestName').textContent = guestName();
+  $('#openBtn').append(icon('mail-open'), 'Buka Undangan');
+  $('#openBtn').addEventListener('click', openInvitation);
+}
+
+function openInvitation() {
+  const cover = $('#cover');
+  cover.classList.add('is-open');
+  document.body.classList.remove('is-locked');
+  document.body.classList.add('is-opened');
+  music.src = CONFIG.music;
+  music.play().catch(() => {});
+  $('#app').focus({ preventScroll: true });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.title = `The Wedding of ${CONFIG.couple.short}`;
+  renderCover();
 });
