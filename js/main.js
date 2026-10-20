@@ -38,6 +38,22 @@ function renderCover() {
   $('#openBtn').addEventListener('click', openInvitation);
 }
 
+function startReveal() {
+  const items = $$('.section-inner > *:not(.timeline), .moment');
+  items.forEach(node => {
+    node.classList.add('reveal');
+    node.style.setProperty('--d', Math.min([...node.parentElement.children].indexOf(node), 4));
+  });
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-in');
+      observer.unobserve(entry.target);
+    });
+  }, { rootMargin: '0px 0px -10% 0px' });
+  items.forEach(node => observer.observe(node));
+}
+
 function openInvitation() {
   const cover = $('#cover');
   cover.classList.add('is-open');
@@ -45,6 +61,7 @@ function openInvitation() {
   document.body.classList.add('is-opened');
   music.src = CONFIG.music;
   music.play().catch(() => {});
+  startReveal();
   $('#app').focus({ preventScroll: true });
 }
 
