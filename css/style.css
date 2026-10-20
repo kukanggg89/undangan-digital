@@ -139,8 +139,10 @@ body.is-locked { overflow: hidden; }
 }
 
 .cover-photo {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  grid-row: 1;
+  min-height: 0;
+  margin-bottom: -72px;
   overflow: hidden;
 }
 
@@ -148,24 +150,28 @@ body.is-locked { overflow: hidden; }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 20%;
+  object-position: 50% 42%;
 }
 
-.cover-photo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgb(248 246 241 / 0) 30%, rgb(248 246 241 / 0.86) 56%, var(--ivory) 72%);
-}
+
 
 .cover-body {
   position: relative;
+  isolation: isolate;
   grid-row: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
   padding: 0 24px max(32px, env(safe-area-inset-bottom));
+}
+
+.cover-body::before {
+  content: "";
+  position: absolute;
+  inset: -72px 0 0;
+  z-index: -1;
+  background: linear-gradient(to bottom, rgb(248 246 241 / 0), rgb(248 246 241 / 0.92) 56px, var(--ivory) 72px);
 }
 
 .cover-names {
@@ -190,7 +196,7 @@ body.is-locked { overflow: hidden; }
 
 .cover-guest strong {
   font-family: var(--serif);
-  font-size: 1.75rem;
+  font-size: clamp(1.375rem, 6vw, 1.75rem);
   font-weight: 500;
   line-height: 1.2;
   color: var(--navy);
@@ -198,7 +204,7 @@ body.is-locked { overflow: hidden; }
 }
 
 @media (min-width: 768px) {
-  .cover-body { padding: 0 48px 48px; max-width: 560px; }
+  .cover-body { padding: 0 max(48px, calc(100% - 560px)) 48px 48px; }
 }
 
 @media (min-width: 992px) {
@@ -207,8 +213,9 @@ body.is-locked { overflow: hidden; }
     grid-template-rows: 1fr;
   }
 
-  .cover-photo { position: relative; grid-column: 1; grid-row: 1; }
-  .cover-photo::after { display: none; }
+  .cover-photo { grid-column: 1; grid-row: 1; margin-bottom: 0; }
+  .cover-photo img { object-position: 50% 30%; }
+  .cover-body::before { display: none; }
 
   .cover-body {
     grid-column: 2;
@@ -1008,4 +1015,15 @@ textarea.input { resize: vertical; min-height: 120px; }
   .cover,
   .dock,
   .shot img { transition: none; }
+}
+
+@media (min-width: 576px) and (max-width: 991.98px) {
+  .opening-photo,
+  .closing-photo {
+    margin: 0 0 16px;
+    aspect-ratio: 3 / 2;
+    border-radius: 4px;
+  }
+
+  .opening { padding-top: 40px; }
 }
