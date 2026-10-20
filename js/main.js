@@ -109,6 +109,86 @@ function renderStory() {
   box.append(el('h2', { class: 'section-title', text: 'Cerita Kami' }), list);
 }
 
+function gcalDate(iso) {
+  return new Date(iso).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+}
+
+function calendarUrl() {
+  const first = CONFIG.events[0];
+  const last = CONFIG.events[CONFIG.events.length - 1];
+  const params = new URLSearchParams({
+    action: 'TEMPLATE',
+    text: `Pernikahan ${CONFIG.couple.short}`,
+    dates: `${gcalDate(first.start)}/${gcalDate(last.end)}`,
+    location: `${first.place}, ${first.address}`,
+    details: CONFIG.events.map(e => `${e.name}: ${e.time}`).join('\n'),
+  });
+  return `https://calendar.google.com/calendar/render?${params}`;
+}
+
+function mapsUrl(ev) {
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${ev.place}, ${ev.address}`)}`;
+}
+
+function startCountdown(box) {
+  const target = new Date(CONFIG.date).getTime();
+  const units = [['hari', 86400000], ['jam', 3600000], ['menit', 60000], ['detik', 1000]];
+  const cells = units.map(([label]) => {
+    const num = el('span', { class: 'count-num', text: '00' });
+    box.append(el('div', { class: 'count-cell' }, [num, el('span', { class: 'count-label', text: label })]));
+    return num;
+  });
+
+  const tick = () => {
+    let left = target - Date.now();
+    if (left <= 0) {
+      clearInterval(timer);
+      box.replaceChildren(el('p', { class: 'count-done', text: 'Acara telah berlangsung. Terima kasih atas doa dan kehadirannya.' }));
+      return;
+    }
+    units.forEach(([, size], i) => {
+      const val = Math.floor(left / size);
+      left -= val * size;
+      cells[i].textContent = String(val).padStart(2, '0');
+    });
+  };
+  const timer = setInterval(tick, 1000);
+  tick();
+}
+
+function renderEvents() {
+  const box = section('acara', 'Waktu dan tempat');
+  const day = new Date(CONFIG.date);
+  const fmt = opts => new Intl.DateTimeFormat('id-ID', { ...opts, timeZone: 'Asia/Jakarta' }).format(day);
+  const countdown = el('div', { class: 'countdown', role: 'timer', 'aria-label': 'Hitung mundur' });
+
+  box.append(
+    el('p', { class: 'eyebrow', text: 'Simpan tanggalnya' }),
+    el('div', { class: 'bigdate' }, [
+      el('span', { class: 'bigdate-day', text: fmt({ weekday: 'long' }) }),
+      el('span', { class: 'bigdate-num serif', text: fmt({ day: 'numeric' }) }),
+      el('span', { class: 'bigdate-month', text: fmt({ month: 'long', year: 'numeric' }) }),
+    ]),
+    countdown,
+    el('div', { class: 'events' }, CONFIG.events.map(ev =>
+      el('div', { class: 'event' }, [
+        el('h3', { class: 'event-name', text: ev.name }),
+        el('p', { class: 'event-line' }, [icon('clock'), el('span', { text: ev.time })]),
+      ])
+    )),
+    el('p', { class: 'event-line venue' }, [icon('map-pin'), el('span', {}, [
+      el('strong', { text: CONFIG.events[0].place }),
+      el('br'),
+      CONFIG.events[0].address,
+    ])]),
+    el('div', { class: 'event-actions' }, [
+      el('a', { class: 'btn-main', href: mapsUrl(CONFIG.events[0]), target: '_blank', rel: 'noopener' }, [icon('map-pin'), 'Lihat Lokasi']),
+      el('a', { class: 'btn-main btn-line', href: calendarUrl(), target: '_blank', rel: 'noopener' }, [icon('calendar-plus'), 'Simpan Tanggal']),
+    ]),
+  );
+  startCountdown(countdown);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.title = `The Wedding of ${CONFIG.couple.short}`;
   renderCover();
@@ -116,4 +196,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderOpening();
   renderCouple();
   renderStory();
+  renderEvents();
 });
