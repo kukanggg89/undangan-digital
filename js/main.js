@@ -494,7 +494,10 @@ function renderStage() {
     if (!media.matches || $('#stage').childElementCount) return;
     const imgs = CONFIG.hero.map((src, i) =>
       el('img', { class: `stage-img${i === 0 ? ' is-on' : ''}`, src, alt: '', loading: i === 0 ? 'eager' : 'lazy' }));
-    $('#stage').append(...imgs);
+    $('#stage').append(el('div', { class: 'stage-arch' }, [
+      el('div', { class: 'stage-frame' }, imgs),
+      ornament('ranting-1', 'stage-orn'),
+    ]));
 
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {

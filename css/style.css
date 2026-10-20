@@ -248,7 +248,7 @@ body.is-locked { overflow: hidden; }
 @media (min-width: 992px) {
   .layout {
     display: grid;
-    grid-template-columns: 58fr 42fr;
+    grid-template-columns: 44fr 56fr;
   }
 
   .stage {
@@ -256,7 +256,43 @@ body.is-locked { overflow: hidden; }
     position: sticky;
     top: 0;
     height: 100dvh;
+    padding: 56px 48px 48px;
+    border-right: 1px solid var(--line);
+  }
+
+  .stage-arch {
+    position: relative;
+    height: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .stage-arch::before {
+    content: "";
+    position: absolute;
+    inset: -18px;
+    border: 1px solid var(--gold);
+    border-radius: 999px 999px 0 0;
+    pointer-events: none;
+  }
+
+  .stage-frame {
+    position: relative;
+    height: 100%;
     overflow: hidden;
+    border-radius: 999px 999px 0 0;
+    box-shadow: 0 0 0 8px var(--ivory), 0 0 0 9px var(--gold);
+    background: var(--blue-light);
+  }
+
+  .stage-orn {
+    position: absolute;
+    right: -46px;
+    bottom: -40px;
+    width: 64px;
+    height: 124px;
+    color: var(--gold);
+    transform: rotate(28deg);
   }
 
   .stage-img {
@@ -998,7 +1034,7 @@ textarea.input { resize: vertical; min-height: 120px; }
 }
 
 @media (min-width: 992px) {
-  .dock { left: 79%; }
+  .dock { left: 72%; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
