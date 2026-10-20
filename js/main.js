@@ -344,7 +344,7 @@ function renderRsvp() {
   ]);
 
   const note = el('p', { class: 'form-note', role: 'status' });
-  const form = el('form', { class: 'rsvp-form', novalidate: '' }, [
+  const form = el('form', { class: 'rsvp-form panel', novalidate: '' }, [
     field('rsvpName', 'Nama', nameInput),
     statusField,
     field('rsvpMessage', 'Ucapan & doa', message, counter),
@@ -353,9 +353,25 @@ function renderRsvp() {
   ]);
 
   const tally = el('div', { class: 'tally' });
-  const list = el('ul', { class: 'wishes' });
-  const more = el('button', { class: 'btn-main btn-line wishes-more', type: 'button' });
-  let expanded = false;
+  const track = el('ul', { class: 'guestbook', 'aria-label': 'Daftar ucapan' });
+  const step = dir => {
+    const card = track.querySelector('.wish');
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    track.scrollBy({ left: dir * ((card?.offsetWidth || 300) + gap), behavior: 'smooth' });
+  };
+  const nav = el('div', { class: 'gb-nav' }, [
+    el('button', { class: 'gb-btn', type: 'button', 'aria-label': 'Ucapan sebelumnya' }, icon('nav-arrow-left')),
+    el('button', { class: 'gb-btn', type: 'button', 'aria-label': 'Ucapan berikutnya' }, icon('nav-arrow-right')),
+  ]);
+  nav.children[0].addEventListener('click', () => step(-1));
+  nav.children[1].addEventListener('click', () => step(1));
+
+  const wishModal = new bootstrap.Modal($('#wishModal'));
+  const openWish = w => {
+    $('#wishModalName').textContent = w.name;
+    $('#wishModalText').textContent = w.message;
+    wishModal.show();
+  };
 
   const draw = () => {
     const all = [...loadWishes(), ...CONFIG.dummyWishes];
@@ -364,23 +380,23 @@ function renderRsvp() {
       el('p', { class: 'tally-item' }, [el('span', { class: 'tally-num serif', text: count(key) }), el('span', { text: label })])
     ));
 
-    const shown = expanded ? all : all.slice(0, 4);
-    list.replaceChildren(...shown.map(w => {
+    track.replaceChildren(...all.map(w => {
       const time = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(w.time));
+      const text = el('p', { class: 'wish-text', text: w.message });
+      const read = el('button', { class: 'wish-read', type: 'button', text: 'Baca semua', hidden: '' });
+      read.addEventListener('click', () => openWish(w));
+      requestAnimationFrame(() => { read.hidden = text.scrollHeight <= text.clientHeight + 1; });
       return el('li', { class: 'wish' }, [
-        el('div', { class: 'wish-head' }, [
+        el('span', { class: 'wish-quote', text: '“', 'aria-hidden': 'true' }),
+        text,
+        read,
+        el('div', { class: 'wish-foot' }, [
           el('p', { class: 'wish-name', text: w.name }),
-          el('p', { class: `wish-status is-${w.status}`, text: STATUS[w.status] || '' }),
+          el('p', { class: 'wish-meta', text: `${STATUS[w.status] || ''}, ${time}` }),
         ]),
-        el('p', { class: 'wish-text', text: w.message }),
-        el('p', { class: 'wish-time', text: time }),
       ]);
     }));
-    more.hidden = all.length <= 4;
-    more.textContent = expanded ? 'Tampilkan lebih sedikit' : `Lihat semua ucapan (${all.length})`;
   };
-
-  more.addEventListener('click', () => { expanded = !expanded; draw(); });
 
   const setError = (id, msg) => {
     $(`#${id}Error`).textContent = msg;
@@ -410,16 +426,19 @@ function renderRsvp() {
     counter.textContent = '0 / 300';
     form.querySelectorAll('input[name="status"]').forEach(r => { r.checked = false; });
     draw();
+    track.scrollTo({ left: 0, behavior: 'smooth' });
   });
 
   box.append(
     el('h2', { class: 'section-title', text: 'Konfirmasi Kehadiran' }),
     el('p', { class: 'section-lead', text: 'Mohon konfirmasi sebelum 5 Desember 2026. Doa dan ucapan juga bisa dititipkan di sini.' }),
     form,
-    el('h3', { class: 'wishes-title', text: 'Ucapan dari tamu' }),
+    el('div', { class: 'gb-head' }, [
+      el('h3', { class: 'wishes-title', text: 'Ucapan dari tamu' }),
+      nav,
+    ]),
     tally,
-    list,
-    more,
+    track,
   );
   draw();
 }

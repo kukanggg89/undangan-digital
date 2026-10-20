@@ -75,6 +75,7 @@ const CONFIG = {
   },
 
   dummyWishes: [
+    { name: 'Anak UKM Fotografi 2019', status: 'hadir', message: 'Masih inget waktu kalian rebutan kamera di sekre, sekarang malah duduk di pelaminan yang sama. Selamat ya Raka, Nadia. Semoga rumah tangganya adem, rezekinya lancar, dan tetap rajin hunting foto berdua walaupun nanti sudah sibuk. Kami siap jadi tamu paling ramai di Lembang.', time: '2026-10-15T20:12:00+07:00' },
     { name: 'Dimas', status: 'hadir', message: 'Selamat Raka & Nadia! Akhirnya ya, ditunggu foto prewed versi UKM-nya.', time: '2026-10-14T19:20:00+07:00' },
     { name: 'Salsa & Keluarga', status: 'hadir', message: 'Semoga jadi keluarga yang sakinah, mawaddah, warahmah. Sampai jumpa di Lembang!', time: '2026-10-12T08:05:00+07:00' },
     { name: 'Bu Ratih', status: 'ragu', message: 'Barakallahu lakuma. Insyaallah diusahakan datang.', time: '2026-10-10T21:47:00+07:00' },
