@@ -414,6 +414,61 @@ function renderGift() {
   );
 }
 
+function renderClosing() {
+  const box = section('penutup', 'Penutup', 'closing');
+  box.append(
+    el('div', { class: 'closing-photo' }, el('img', { src: CONFIG.hero[3], alt: `${CONFIG.couple.short} bergandengan`, loading: 'lazy', width: 1600, height: 1067 })),
+    el('h2', { class: 'section-title', text: 'Terima Kasih' }),
+    el('p', { class: 'closing-text', text: 'Merupakan kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.' }),
+    el('p', { class: 'closing-text', text: 'Wassalamu’alaikum Warahmatullahi Wabarakatuh' }),
+    el('div', { class: 'closing-sign' }, [
+      ornament('ranting-1', 'closing-orn'),
+      el('p', { text: 'Kami yang berbahagia,' }),
+      el('p', { class: 'closing-names serif', text: CONFIG.couple.short }),
+    ]),
+  );
+  $('#app').append(el('footer', { class: 'foot' }, el('p', { text: `${CONFIG.couple.short}, 2026` })));
+}
+
+const NAV = [
+  ['home', 'home', 'Pembuka'],
+  ['mempelai', 'heart', 'Mempelai'],
+  ['acara', 'calendar', 'Acara'],
+  ['galeri', 'media-image', 'Galeri'],
+  ['rsvp', 'chat-bubble', 'Ucapan'],
+  ['hadiah', 'gift', 'Tanda kasih'],
+];
+
+function renderDock() {
+  const dock = $('#dock');
+  const links = NAV.map(([id, ic, label]) =>
+    el('a', { class: 'dock-link', href: `#${id}`, 'aria-label': label, title: label }, icon(ic)));
+
+  const musicBtn = el('button', { class: 'dock-link dock-music', type: 'button', 'aria-label': 'Musik', 'aria-pressed': 'false' }, icon('sound-off'));
+  const syncMusic = () => {
+    const playing = !music.paused;
+    musicBtn.setAttribute('aria-pressed', String(playing));
+    musicBtn.setAttribute('aria-label', playing ? 'Matikan musik' : 'Putar musik');
+    musicBtn.replaceChildren(icon(playing ? 'music-double-note' : 'sound-off'));
+  };
+  musicBtn.addEventListener('click', () => {
+    if (music.paused) music.play().catch(() => {});
+    else music.pause();
+  });
+  music.addEventListener('play', syncMusic);
+  music.addEventListener('pause', syncMusic);
+
+  dock.append(...links, el('span', { class: 'dock-sep', 'aria-hidden': 'true' }), musicBtn);
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      links.forEach(a => a.classList.toggle('is-active', a.hash === `#${entry.target.id}`));
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  NAV.forEach(([id]) => observer.observe($(`#${id}`)));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.title = `The Wedding of ${CONFIG.couple.short}`;
   renderCover();
@@ -425,4 +480,6 @@ document.addEventListener('DOMContentLoaded', () => {
   renderGallery();
   renderRsvp();
   renderGift();
+  renderClosing();
+  renderDock();
 });
