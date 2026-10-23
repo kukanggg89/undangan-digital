@@ -25,13 +25,6 @@ const CONFIG = {
     source: 'QS. Ar-Rum: 21',
   },
 
-  story: [
-    { date: 'Agustus 2019', title: 'Pertama Bertemu', text: 'Kenalan di UKM fotografi kampus. Raka salah ambil kamera, ternyata punya Nadia.' },
-    { date: 'Maret 2021', title: 'Mulai Bersama', text: 'Setelah dua tahun hunting foto bareng, akhirnya sepakat jalan berdua.' },
-    { date: 'Juni 2025', title: 'Lamaran', text: 'Raka datang bersama keluarga ke rumah Nadia di Bandung, dan lamarannya diterima.' },
-    { date: 'Desember 2026', title: 'Hari Bahagia', text: 'Kami menikah di Lembang, ditemani keluarga dan sahabat terdekat.' },
-  ],
-
   events: [
     {
       name: 'Akad Nikah',

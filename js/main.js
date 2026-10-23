@@ -46,7 +46,7 @@ function renderCover() {
 }
 
 function startReveal() {
-  const items = $$('.section-inner > *:not(.timeline), .moment');
+  const items = $$('.section-inner > *');
   items.forEach(node => {
     node.classList.add('reveal');
     node.style.setProperty('--d', Math.min([...node.parentElement.children].indexOf(node), 4));
@@ -132,26 +132,6 @@ function renderCouple() {
     el('p', { class: 'amp serif', text: '&', 'aria-hidden': 'true' }),
     person(bride, 'right'),
   );
-}
-
-const MONTHS = ['januari', 'februari', 'maret', 'april', 'mei', 'juni', 'juli', 'agustus', 'september', 'oktober', 'november', 'desember'];
-
-function stamp(label) {
-  const [month, year] = label.toLowerCase().split(' ');
-  return `${String(MONTHS.indexOf(month) + 1).padStart(2, '0')} '${year.slice(2)}`;
-}
-
-function renderStory() {
-  const box = section('kisah', 'Kisah cinta', 'section-alt');
-  const film = el('ol', { class: 'timeline film' }, CONFIG.story.map(item =>
-    el('li', { class: 'moment' }, [
-      el('span', { class: 'visually-hidden', text: item.date }),
-      el('h3', { class: 'moment-title', text: item.title }),
-      el('p', { text: item.text }),
-      el('span', { class: 'stamp', text: stamp(item.date), 'aria-hidden': 'true' }),
-    ])
-  ));
-  box.append(el('h2', { class: 'section-title', text: 'Cerita Kami' }), film);
 }
 
 function gcalDate(iso) {
@@ -352,7 +332,6 @@ function renderRsvp() {
     note,
   ]);
 
-  const tally = el('div', { class: 'tally' });
   const track = el('ul', { class: 'guestbook', 'aria-label': 'Daftar ucapan' });
   const step = dir => {
     const card = track.querySelector('.wish');
@@ -375,11 +354,6 @@ function renderRsvp() {
 
   const draw = () => {
     const all = [...loadWishes(), ...CONFIG.dummyWishes];
-    const count = key => all.filter(w => w.status === key).length;
-    tally.replaceChildren(...Object.entries(STATUS).map(([key, label]) =>
-      el('p', { class: 'tally-item' }, [el('span', { class: 'tally-num serif', text: count(key) }), el('span', { text: label })])
-    ));
-
     track.replaceChildren(...all.map(w => {
       const time = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(w.time));
       const text = el('p', { class: 'wish-text', text: w.message });
@@ -437,7 +411,6 @@ function renderRsvp() {
       el('h3', { class: 'wishes-title', text: 'Doa & Ucapan' }),
       nav,
     ]),
-    tally,
     track,
   );
   draw();
@@ -594,7 +567,7 @@ function renderDock() {
   NAV.forEach(([id]) => observer.observe($(`#${id}`)));
 }
 
-const STAGE_MAP = { home: 0, mempelai: 0, kisah: 1, acara: 1, galeri: 2, rsvp: 2, hadiah: 3, penutup: 3 };
+const STAGE_MAP = { home: 0, mempelai: 0, acara: 1, galeri: 2, rsvp: 2, hadiah: 3, penutup: 3 };
 
 function renderStage() {
   const media = matchMedia('(min-width: 992px)');
@@ -625,7 +598,6 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCover();
   renderOpening();
   renderCouple();
-  renderStory();
   renderEvents();
   renderGallery();
   renderRsvp();

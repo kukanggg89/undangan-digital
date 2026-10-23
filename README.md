@@ -8,7 +8,7 @@ Link: https://undangan-digital-one-chi.vercel.app/?to=Nama%20Tamu
 
 - Nama tamu otomatis dari link, contoh `?to=Budi`
 - Cover dulu, undangan baru kebuka setelah klik tombol (musik ikut nyala)
-- Profil mempelai, cerita singkat, info acara
+- Profil mempelai sama info acara
 - Countdown ke hari H, kalau udah lewat tulisannya ganti
 - Tombol buka lokasi di Google Maps sama simpan ke Google Calendar
 - Galeri foto, bisa diklik buat lihat gede
