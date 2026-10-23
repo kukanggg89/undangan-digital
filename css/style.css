@@ -1410,13 +1410,10 @@ textarea.input { resize: vertical; min-height: 120px; }
 }
 
 .mono-ring {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 2px;
+  display: grid;
+  place-items: center;
   width: 84px;
   height: 84px;
-  padding-top: 18px;
   border: 1px solid var(--gold);
   border-radius: 50%;
   outline: 1px solid var(--gold);
@@ -1424,6 +1421,13 @@ textarea.input { resize: vertical; min-height: 120px; }
   font-family: var(--serif);
   font-size: 2rem;
   line-height: 1;
+}
+
+.mono-text {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  text-box: trim-both cap alphabetic;
 }
 
 .mono-amp {

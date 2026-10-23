@@ -80,11 +80,11 @@ function monogram(cls = '') {
   const [a, b] = initials();
   return el('div', { class: `monogram ${cls}`.trim(), 'aria-hidden': 'true' }, [
     ornament('ranting-1', 'mono-orn mono-orn-left'),
-    el('div', { class: 'mono-ring' }, [
+    el('div', { class: 'mono-ring' }, el('span', { class: 'mono-text' }, [
       el('span', { text: a }),
       el('span', { class: 'mono-amp', text: '&' }),
       el('span', { text: b }),
-    ]),
+    ])),
     ornament('ranting-1', 'mono-orn'),
   ]);
 }
